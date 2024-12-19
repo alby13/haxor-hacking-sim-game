@@ -114,3 +114,153 @@ connect corp_network to target the corporate network.
 Overall:
 
 The game offers a fun and engaging text-based experience for those interested in hacking and cybersecurity themes. It combines elements of exploration, strategy, risk management, and character progression to create a challenging and rewarding gameplay loop. The code is well-structured and relatively easy to understand, making it a good starting point for those interested in learning about text-based game development in Python.
+
+.
+
+Gameplay and Code Structure
+
+The game's flow can be broken down into several key systems and loops, all driven by the Python code:
+
+1. Game Initialization and Data Structures:
+
+GameState Class: This class (class GameState) holds the player's current state:
+
+current_location: The system the player is currently connected to.
+
+experience, reputation, money: Player's progress metrics.
+
+inventory: Tools purchased from the shop.
+
+missions_completed, discovered_exploits: Tracks completed objectives.
+
+active_mission: The currently selected mission.
+
+user_data Dictionary: Stores core player attributes:
+
+username, password: For login (currently basic).
+
+level: Determines access to systems.
+
+firewall, encryption, stealth: Core skills that can be upgraded.
+
+network Dictionary: Defines the game world's network topology:
+
+Each key (e.g., "home", "server1") is a system.
+
+Each system has attributes: type, files, password, required_level, ascii_art, and sometimes firewall. This dictionary dictates the layout of the network, security levels, and content of each system.
+
+shop_items Dictionary: Lists items available for purchase on the darknet:
+
+name, cost, description, type (e.g., "tool", "defense").
+
+missions Dictionary: Defines the available missions:
+
+name, description, target (system to hack), reward, min_level.
+
+known_ips Dictionary: Maps system names to their "IP addresses" for flavor.
+
+cracked_systems List: Tracks systems the player has successfully cracked.
+
+2. Main Game Loop (main() function):
+
+Initialization: Clears the screen, displays the game title, and prints a welcome message.
+
+Command Input and Processing:
+
+display_prompt(): Shows the player's current location and waits for input.
+
+The loop continuously takes player input (commands).
+
+Input is split into command_name and command_args.
+
+command_map (a dictionary) links command names (strings) to their corresponding functions (e.g., "help": cmd_help).
+
+Command Execution: The appropriate command function is executed based on the player's input.
+
+3. Command Functions (e.g., cmd_help, cmd_ls, cmd_connect, etc.):
+
+These functions implement the core gameplay mechanics.
+
+Navigation (cmd_connect, cmd_disconnect):
+
+cmd_connect checks if the target system exists, if the player has access (level, cracked status), and then simulates a connection attempt, updating game_state.current_location. It leverages calculate_success_chance() and random chance for success or failure.
+
+cmd_disconnect returns the player to the "home" system.
+
+System Interaction (cmd_ls, cmd_cat):
+
+cmd_ls lists files in the files list of the current system (from the network dictionary).
+
+cmd_cat displays the content of a specified file. File content is currently hardcoded within the cmd_cat function based on the filename.
+
+Hacking (cmd_crack):
+
+Simulates password cracking using display_hacking_animation() for visual effect.
+
+Uses calculate_success_chance() based on player level, tools, and system security.
+
+Success adds the system to cracked_systems, potentially granting reputation and completing missions.
+
+Failure can trigger intrusion alerts.
+
+Progression (cmd_upgrade, cmd_shop):
+
+cmd_upgrade allows spending game_state.money to increase firewall, encryption, or stealth in user_data.
+
+cmd_shop (only accessible on "darknet") lets the player buy items from shop_items, deducting game_state.money and adding the item to game_state.inventory.
+
+Missions (cmd_mission):
+
+Displays available missions from the missions dictionary.
+
+Allows accepting missions, setting game_state.active_mission.
+
+Mission completion is checked within cmd_crack if the cracked system matches the mission target.
+
+Information (cmd_status, cmd_map, cmd_inventory):
+
+cmd_status shows player stats.
+
+cmd_map displays a text-based map of the network and system status (cracked/secured).
+
+cmd_inventory lists purchased items.
+
+Utility (cmd_help, cmd_clear, cmd_scan):
+
+cmd_help shows available commands.
+
+cmd_clear clears the terminal screen.
+
+cmd_scan lists discoverable systems and their types.
+
+cmd_exit: Terminates the game loop.
+
+4. Helper Functions:
+
+display_loading_bar(): Creates an animated loading bar.
+
+display_hacking_animation(): Displays a spinning hacking animation.
+
+display_prompt(): Shows the current location and user in the command prompt.
+
+type_effect(): Simulates typing text to the screen.
+
+calculate_success_chance(): Calculates the probability of a successful hack based on player attributes and target system security.
+
+trigger_random_event(): Has a chance to trigger a random event that modifies gameplay.
+
+display_system_info(): Prints information about a system, including its ASCII art.
+
+Gameplay Paths and Loops:
+
+Exploration Loop: scan -> connect -> ls -> cat -> disconnect
+
+Hacking Loop: connect -> crack (success/failure) -> (potential mission completion)
+
+Progression Loop: (Complete missions/crack systems) -> Earn money/reputation -> upgrade skills / shop for items -> (Become more powerful)
+
+Mission Loop: mission -> mission accept -> (Navigate to target) -> crack (target system) -> (Complete mission) -> (Rewards)
+
+Code Structure Summary:
+
+The game is built around a central loop that processes player commands. These commands trigger functions that interact with the game's data structures (representing the player, network, items, and missions). Helper functions enhance the visual presentation and calculate game mechanics. The interaction between these elements creates the dynamic gameplay experience of exploration, hacking, progression, and mission completion.
