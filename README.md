@@ -1,4 +1,4 @@
-# Haxor Hacking Simulator Text Game
+# Haxer Hacking Simulator Text Game
 This code implements a text-based hacker simulation game where you play as a hacker navigating a virtual network, trying to infiltrate systems, complete missions, and upgrade your skills. Here's a breakdown of the game:
 
 Core Gameplay:
